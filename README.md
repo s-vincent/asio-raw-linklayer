@@ -15,11 +15,12 @@ Boost system library has to be installed.
 
 ## Build
 
-The library is C++ header only.
+To build:
+* make
 
 To build the samples:
-cd samples
-make
+* cd samples
+* make
 
 ## License
 
