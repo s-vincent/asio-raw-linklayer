@@ -11,7 +11,7 @@ For compilation:
 Boost headers have to be installed as well as Boost system development library.
 
 For use:
-Boost system library to be installed.
+Boost system library has to be installed.
 
 ## Build
 
