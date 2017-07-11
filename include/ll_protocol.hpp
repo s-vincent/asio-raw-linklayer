@@ -24,7 +24,7 @@
 
 #include <net/if.h>
 #include <net/ethernet.h>
-#include <linux/if_packet.h>
+#include <netpacket/packet.h>
 #else
 #error "This library supports only GNU/Linux!"
 #endif
