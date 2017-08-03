@@ -68,7 +68,7 @@ namespace asio
        *    {
        *      throw boost::system::system_error(err);
        *    }
-       *  
+       *
        *    // do stuff with packet
        *    // ...
        *  }
@@ -94,7 +94,7 @@ namespace asio
            * \param eth_protocol specific network protocol to monitor (default all).
            */
           ll_endpoint(uint16_t eth_protocol = ETH_P_ALL)
-            : m_protocol_type(eth_protocol) 
+            : m_protocol_type(eth_protocol)
           {
             m_sockaddr.sll_family = PF_PACKET;
             // protocol is already htons() in ll_protocol
@@ -110,7 +110,7 @@ namespace asio
            */
           ll_endpoint(const std::string& ifname,
                   uint16_t eth_protocol = ETH_P_ALL)
-            : m_protocol_type(eth_protocol) 
+            : m_protocol_type(eth_protocol)
           {
             unsigned int ifindex = 0;
 
@@ -120,7 +120,7 @@ namespace asio
 
               if(ifindex == 0 && errno != 0)
               {
-                std::string str = "network interface '" + ifname + 
+                std::string str = "network interface '" + ifname +
                   "' does not exist";
                 throw std::runtime_error(str);
               }
@@ -202,8 +202,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for inequality.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is equal to the second endpoint.
            */
           friend bool operator==(const ll_endpoint<Protocol>& e1,
@@ -214,8 +214,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for inequality.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is not equal to the second endpoint.
            */
           friend bool operator!=(const ll_endpoint<Protocol>& e1,
@@ -226,8 +226,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for ordering.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is lower than second endpoint.
            */
           friend bool operator<(const ll_endpoint<Protocol>& e1,
@@ -238,8 +238,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for ordering.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is greater than second endpoint.
            */
           friend bool operator>(const ll_endpoint<Protocol>& e1,
@@ -250,8 +250,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for ordering.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is lower than second endpoint.
            */
           friend bool operator<=(const ll_endpoint<Protocol>& e1,
@@ -262,8 +262,8 @@ namespace asio
 
           /**
            * \brief Compare endpoints for ordering.
-           * \param e1 first endpoint to compare. 
-           * \param e2 second endpoint to compare. 
+           * \param e1 first endpoint to compare.
+           * \param e2 second endpoint to compare.
            * \return true if first is greater or equal than second endpoint.
            */
           friend bool operator>=(const ll_endpoint<Protocol>& e1,

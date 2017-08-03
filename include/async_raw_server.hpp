@@ -56,7 +56,7 @@ namespace asio
            * \param data data to send.
            */
           void async_send(const std::vector<char>& data);
-          
+
           /**
            * \brief Start send operation.
            * \param data data to send.
@@ -96,7 +96,7 @@ namespace asio
           /**
            * \brief Link-layer endpoint.
            */
-          asio::raw::ll::ll_protocol::endpoint m_endpoint; 
+          asio::raw::ll::ll_protocol::endpoint m_endpoint;
 
           /**
            * \brief Raw link-layer socket.

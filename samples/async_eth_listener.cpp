@@ -33,87 +33,87 @@ using namespace asio::raw::ll;
  */
 class eth_listener : public async_raw_server
 {
-    public:
-        eth_listener(boost::asio::io_service& ios, const std::string& ifname,
-                int protocol = ETH_P_ALL)
-            : async_raw_server(ios, ifname, protocol)
-        {
-        }
+  public:
+    eth_listener(boost::asio::io_service& ios, const std::string& ifname,
+        int protocol = ETH_P_ALL)
+      : async_raw_server(ios, ifname, protocol)
+    {
+    }
 
-        /**
-         * \brief Receive callback.
-         * \param error error value.
-         * \param nb number of bytes transferred.
-         */
-        virtual void handle_recv(
-                const boost::system::error_code& error, size_t nb)
-        {
-            const struct ether_header* hdr = nullptr;
-            const char* data = nullptr;
+    /**
+     * \brief Receive callback.
+     * \param error error value.
+     * \param nb number of bytes transferred.
+     */
+    virtual void handle_recv(
+        const boost::system::error_code& error, size_t nb)
+    {
+      const struct ether_header* hdr = nullptr;
+      const char* data = nullptr;
 
-            if(error && error != boost::asio::error::message_size)
-            {
-                std::cerr << "Error receiving: " << error << std::endl;
-                async_recv();
-                return;
-            }
+      if(error && error != boost::asio::error::message_size)
+      {
+        std::cerr << "Error receiving: " << error << std::endl;
+        async_recv();
+        return;
+      }
 
-            if(nb < sizeof(struct ether_header))
-            {
-                // data too small
-                async_recv();
-                return;
-            }
+      if(nb < sizeof(struct ether_header))
+      {
+        // data too small
+        async_recv();
+        return;
+      }
 
-            data = buffer().data();
-            hdr = reinterpret_cast<const struct ether_header*>(data);
+      data = buffer().data();
+      hdr = reinterpret_cast<const struct ether_header*>(data);
 
-            // print out ethernet header information
-            std::cout << "Packet received: type=0x" << std::hex 
-                << ntohs(hdr->ether_type) << std::dec << " "
-                << "dst_addr="
-                << eth_ntop(hdr->ether_dhost) << " "
-                << "src_addr="
-                << eth_ntop(hdr->ether_shost) << " "
-                << std::endl;
+      // print out ethernet header information
+      std::cout << "Packet received: type=0x" << std::hex
+        << ntohs(hdr->ether_type) << std::dec << " "
+        << "dst_addr="
+        << eth_ntop(hdr->ether_dhost) << " "
+        << "src_addr="
+        << eth_ntop(hdr->ether_shost) << " "
+        << std::endl;
 
-            // start again an asynchronous receive
-            async_recv();
-        }
+      // start again an asynchronous receive
+      async_recv();
+    }
 
-        /**
-         * \brief Send callback.
-         * \param error error value.
-         * \param nb number of bytes transferred.
-         */
-        virtual void handle_send(const boost::system::error_code& error,
-                size_t nb)
-        {
-            (void)error;
-            (void)nb;
-        }
+    /**
+     * \brief Send callback.
+     * \param error error value.
+     * \param nb number of bytes transferred.
+     */
+    virtual void handle_send(const boost::system::error_code& error,
+        size_t nb)
+    {
+      (void)error;
+      (void)nb;
+    }
 
-    private:
-        /**
-         * \brief Converts ethernet address to human-readable form.
-         * \param src binary ethernet address.
-         * \return std::string containing human-readable form or empty string if error.
-         */
-        static std::string eth_ntop(const void* src)
-        {
-            const uint8_t* s = reinterpret_cast<const uint8_t*>(src);
-            std::ostringstream oss;
+  private:
+    /**
+     * \brief Converts ethernet address to human-readable form.
+     * \param src binary ethernet address.
+     * \return std::string containing human-readable form or empty string if error.
+     */
+    static std::string eth_ntop(const void* src)
+    {
+      const uint8_t* s = reinterpret_cast<const uint8_t*>(src);
+      std::ostringstream oss;
 
-            oss << std::setw(2) << std::setfill('0') << std::hex
-                << static_cast<uint32_t>(s[0]);
-            for(size_t i = 1 ; i < ETH_ALEN ; i++)
-            {
-                oss << ":" << std::setw(2) <<std::setfill('0') << std::hex
-                    << static_cast<uint32_t>(s[i]);
-            }
+      oss << std::setw(2) << std::setfill('0') << std::hex
+        << static_cast<uint32_t>(s[0]);
+      for(size_t i = 1 ; i < ETH_ALEN ; i++)
+      {
+        oss << ":" << std::setw(2) <<std::setfill('0') << std::hex
+          << static_cast<uint32_t>(s[i]);
+      }
 
-            return oss.str();
-        }
+      return oss.str();
+    }
 };
 
 /**

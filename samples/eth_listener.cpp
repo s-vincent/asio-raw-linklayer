@@ -107,7 +107,7 @@ int main(int argc, char** argv)
     using namespace asio::raw::ll;
     boost::asio::io_service ios;
     ll_endpoint<ll_protocol> endpoint;
-    
+
     if(ifname)
     {
       endpoint = ll_endpoint<ll_protocol>(ifname, ETH_P_IP);
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     {
       endpoint = ll_endpoint<ll_protocol>(ETH_P_IP);
     }
-    
+
     ll_protocol::socket socket(ios, endpoint);
     socket.bind(endpoint);
 
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
       hdr = reinterpret_cast<struct ether_header*>(buffer.data());
 
       // print out ethernet header information
-      std::cout << "Packet received: type=0x" << std::hex 
+      std::cout << "Packet received: type=0x" << std::hex
         << ntohs(hdr->ether_type) << std::dec << " "
         << "dst_addr="
         << eth_ntop(hdr->ether_dhost) << " "
