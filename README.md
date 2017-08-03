@@ -16,11 +16,14 @@ Boost system library has to be installed.
 ## Build
 
 To build:
-* make
+
+`make`
 
 To build the samples:
-* cd samples
-* make
+
+`cd samples`
+
+`make`
 
 ## License
 
