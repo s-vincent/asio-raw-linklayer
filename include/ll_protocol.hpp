@@ -91,7 +91,7 @@ namespace asio
 
           /**
            * \brief Constructor.
-           * \param eth_protocol specific network protocol to monitor (default all).
+           * \param eth_protocol network protocol to monitor (default all).
            */
           ll_endpoint(uint16_t eth_protocol = ETH_P_ALL)
             : m_protocol_type(eth_protocol)
@@ -131,6 +131,16 @@ namespace asio
             m_sockaddr.sll_protocol = m_protocol_type.protocol();
             m_sockaddr.sll_ifindex = ifindex;
             m_sockaddr.sll_hatype = 1;
+          }
+
+          /**
+           * \brief Constructor.
+           * \param addr socket address.
+           */
+          ll_endpoint(struct sockaddr_ll& addr)
+            : m_protocol_type(ETH_P_ALL)
+          {
+            m_sockaddr = addr;
           }
 
           /**

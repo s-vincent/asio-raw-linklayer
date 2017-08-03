@@ -37,11 +37,22 @@ namespace asio
 
       void async_raw_server::async_send(const std::vector<char>& data)
       {
+        asio::raw::ll::ll_protocol::endpoint remote;
+        const struct ether_header* hdr =
+          reinterpret_cast<const struct ether_header*>(data.data());
+        struct sockaddr_ll addr = *reinterpret_cast<struct sockaddr_ll*>(
+            m_endpoint.data());
+
+        addr.sll_halen = ETH_ALEN;
+        memcpy(&addr.sll_addr, hdr->ether_dhost, ETH_ALEN);
+
+        remote = asio::raw::ll::ll_protocol::endpoint(addr);
+
         // be sure to hold data lifetime in memory until send finished
         std::shared_ptr<std::vector<char>> copy =
           std::make_shared<std::vector<char>>(data);
 
-        m_socket.async_send_to(boost::asio::buffer(*copy), m_endpoint,
+        m_socket.async_send_to(boost::asio::buffer(*copy), remote,
             boost::bind(&async_raw_server::handle_send, this,
               boost::asio::placeholders::error,
               boost::asio::placeholders::bytes_transferred));

@@ -122,6 +122,37 @@ int main(int argc, char** argv)
 
     std::cout << "Raw socket running" << std::endl;
 
+    /* send invalid packet */
+    {
+      char buf[1500];
+      ll_endpoint<ll_protocol> remote;
+      const struct ether_header* hdr =
+        reinterpret_cast<const struct ether_header*>(buf);
+      struct sockaddr_ll addr = *reinterpret_cast<struct sockaddr_ll*>(
+          endpoint.data());
+
+      buf[0] = 0x00;
+      buf[1] = 0x01;
+      buf[2] = 0x02;
+      buf[3] = 0x03;
+      buf[4] = 0x04;
+      buf[5] = 0x05;
+      buf[6] = 0x06;
+      buf[7] = 0x07;
+      buf[8] = 0x08;
+      buf[9] = 0x09;
+      buf[10] = 0x0A;
+      buf[11] = 0x0B;
+      buf[12] = static_cast<char>(0x86);
+      buf[13] = static_cast<char>(0xDD);
+
+      addr.sll_halen = ETH_ALEN;
+      memcpy(&addr.sll_addr, hdr->ether_dhost, ETH_ALEN);
+      remote = asio::raw::ll::ll_protocol::endpoint(addr);
+
+      socket.send_to(boost::asio::buffer(buf, 14), remote);
+    }
+
     while(g_run)
     {
       boost::system::error_code err;

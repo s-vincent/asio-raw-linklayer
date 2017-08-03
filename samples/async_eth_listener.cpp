@@ -89,8 +89,13 @@ class eth_listener : public async_raw_server
     virtual void handle_send(const boost::system::error_code& error,
         size_t nb)
     {
-      (void)error;
-      (void)nb;
+      if(error && error != boost::asio::error::message_size)
+      {
+        std::cerr << "Error sending packet: " << error << std::endl;
+        return;
+      }
+
+      std::cout << "Send packet of " << nb << " bytes" << std::endl;
     }
 
   private:
@@ -164,6 +169,27 @@ int main(int argc, char** argv)
 
     std::cout << "Raw socket running" << std::endl;
     server.async_recv();
+
+    /* send invalid packet */
+    {
+      char buf[32];
+
+      buf[0] = 0x00;
+      buf[1] = 0x01;
+      buf[2] = 0x02;
+      buf[3] = 0x03;
+      buf[4] = 0x04;
+      buf[5] = 0x05;
+      buf[6] = 0x06;
+      buf[7] = 0x07;
+      buf[8] = 0x08;
+      buf[9] = 0x09;
+      buf[10] = 0x0A;
+      buf[11] = 0x0B;
+      buf[12] = static_cast<char>(0x86);
+      buf[13] = static_cast<char>(0xDD);
+      server.async_send(buf, 14);
+    }
 
     ios.run();
   }
