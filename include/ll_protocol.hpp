@@ -13,8 +13,8 @@
  * \date 2017
  */
 
-#ifndef ASIO_RAW_LL_LL_PROTOCOL
-#define ASIO_RAW_LL_LL_PROTOCOL
+#ifndef ASIO_RAW_LL_LL_PROTOCOL_HPP
+#define ASIO_RAW_LL_LL_PROTOCOL_HPP
 
 #include <boost/asio.hpp>
 
@@ -219,7 +219,8 @@ namespace asio
           friend bool operator==(const ll_endpoint<Protocol>& e1,
               const ll_endpoint<Protocol>& e2)
           {
-            return e1.m_sockaddr == e2.m_sockaddr;
+            return !memcmp(&e1.m_sockaddr, &e2.m_sockaddr,
+                sizeof(struct sockaddr_ll));
           }
 
           /**
@@ -231,7 +232,8 @@ namespace asio
           friend bool operator!=(const ll_endpoint<Protocol>& e1,
               const ll_endpoint<Protocol>& e2)
           {
-            return !(e1.m_sockaddr == e2.m_sockaddr);
+            return memcmp(&e1.m_sockaddr, &e2.m_sockaddr,
+                sizeof(struct sockaddr_ll));
           }
 
           /**
@@ -243,7 +245,8 @@ namespace asio
           friend bool operator<(const ll_endpoint<Protocol>& e1,
               const ll_endpoint<Protocol>& e2)
           {
-            return e1.m_sockaddr < e2.m_sockaddr;
+            return memcmp(&e1.m_sockaddr, &e2.m_sockaddr,
+                sizeof(struct sockaddr_ll)) < 0;
           }
 
           /**
@@ -255,7 +258,8 @@ namespace asio
           friend bool operator>(const ll_endpoint<Protocol>& e1,
               const ll_endpoint<Protocol>& e2)
           {
-            return e2.m_sockaddr < e1.m_sockaddr;
+            return memcmp(&e1.m_sockaddr, &e2.m_sockaddr,
+                sizeof(struct sockaddr_ll)) > 0;
           }
 
           /**
@@ -267,7 +271,7 @@ namespace asio
           friend bool operator<=(const ll_endpoint<Protocol>& e1,
               const ll_endpoint<Protocol>& e2)
           {
-            return !(e2 < e1);
+            return !(e2 > e1);
           }
 
           /**
@@ -365,5 +369,5 @@ namespace asio
   } /* namespace raw */
 } /* namespace asio */
 
-#endif /* ASIO_RAW_LL_LL_PROTOCOL */
+#endif /* ASIO_RAW_LL_LL_PROTOCOL_HPP */
 
